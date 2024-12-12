@@ -1,3 +1,6 @@
+require('dotenv').config();
+
+
 const express = require('express');
 const { resolve } = require('path');
 
@@ -6,8 +9,14 @@ const port = 3010;
 
 app.use(express.static('static'));
 
+const isAdmin = process.env.IS_ADMIN === 'true';
+
 app.get('/', (req, res) => {
-  res.sendFile(resolve(__dirname, 'pages/index.html'));
+  if (process.env.IS_ADMIN === 'true') {
+    res.send({ message: "Welcome, Admin!", data: ["Admin Data 1", "Admin Data 2"] });
+  } else {
+    res.send({ message: "Welcome, User!", data: ["User Data 1", "User Data 2"] });
+  }
 });
 
 app.listen(port, () => {
